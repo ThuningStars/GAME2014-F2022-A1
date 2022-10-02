@@ -41,3 +41,30 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 4292325
+    locked: 0
+  - name: BackCloud
+    uniqueID: 1618526607
+    locked: 0
+  - name: UpperCloud
+    uniqueID: 28320135
+    locked: 0
+  - name: EngineFlame
+    uniqueID: 4015470507
+    locked: 0
+  - name: Ray
+    uniqueID: 4292475575
+    locked: 0
+  - name: Projectile
+    uniqueID: 1547573333
+    locked: 0
+  - name: Enemy
+    uniqueID: 3108950657
+    locked: 0
+  - name: Player
+    uniqueID: 3449278743
+    locked: 0
+  - name: Shield
+    uniqueID: 4290986077
+    locked: 0
