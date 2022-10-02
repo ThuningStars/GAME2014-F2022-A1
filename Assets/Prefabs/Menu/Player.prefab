@@ -182,8 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56148b6b730eeaa4c93a90205a415977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 0.5
+  patrolSpeed: 1
   horizontalBoundary:
     min: -2
     max: 2
-  isPatrolRight: 1
+  playerPatrolY: -4.2
