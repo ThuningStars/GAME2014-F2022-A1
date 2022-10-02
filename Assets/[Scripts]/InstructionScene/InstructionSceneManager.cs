@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class InstructionSceneManager : MonoBehaviour
 {
-    public void BackButtonPress()
+    public void BackButtonPressed()
     {
         SceneManager.LoadScene(sceneBuildIndex: 0);
     }
