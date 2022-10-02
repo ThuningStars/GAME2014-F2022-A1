@@ -47,11 +47,8 @@ TagManager:
   - name: BackgroundUpper
     uniqueID: 1760640343
     locked: 0
-  - name: BackCloud
+  - name: Cloud
     uniqueID: 1618526607
-    locked: 0
-  - name: UpperCloud
-    uniqueID: 28320135
     locked: 0
   - name: EngineFlame
     uniqueID: 4015470507
@@ -70,4 +67,7 @@ TagManager:
     locked: 0
   - name: Shield
     uniqueID: 4290986077
+    locked: 0
+  - name: UI
+    uniqueID: 28320135
     locked: 0
