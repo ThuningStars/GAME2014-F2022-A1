@@ -71,7 +71,7 @@ TagManager:
   - name: Shield
     uniqueID: 4290986077
     locked: 0
-  - name: Item
+  - name: Pickups
     uniqueID: 28320135
     locked: 0
   - name: 
