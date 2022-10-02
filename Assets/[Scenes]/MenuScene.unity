@@ -12386,11 +12386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15250de0acab7b64581c4946331bda34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 130142741}
+  playerObject: {fileID: 130142741}
   menu: {fileID: 1588025209}
-  verticalBoundary:
-    min: -6
-    max: 6
 --- !u!4 &750466132
 Transform:
   m_ObjectHideFlags: 0
@@ -12572,7 +12569,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 750466131}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: GoToGamePlayScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21367,7 +21364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.84260505}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 18, y: 150}
+  m_AnchoredPosition: {x: 18, y: -97}
   m_SizeDelta: {x: -1240, y: -428}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1823138972
@@ -21858,6 +21855,10 @@ PrefabInstance:
     - target: {fileID: 7303604667572360832, guid: cd529d0606b324c4c87cba5d1f1801b9, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7303604667572360833, guid: cd529d0606b324c4c87cba5d1f1801b9, type: 3}
+      propertyPath: patrolSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7303604667572360839, guid: cd529d0606b324c4c87cba5d1f1801b9, type: 3}
       propertyPath: m_RootOrder

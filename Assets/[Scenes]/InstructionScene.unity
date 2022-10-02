@@ -1043,8 +1043,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1772654983}
-        m_TargetAssemblyTypeName: InstructionSceneManager, Assembly-CSharp
-        m_MethodName: BackButtonPress
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: GoToMenuScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17531,7 +17531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ' - Protect 1 Attack'
+  m_text: ' - Shield: Protect 1 Attack'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c00d4b8ce18d41e4a94fd31fefb9d285, type: 2}
   m_sharedMaterial: {fileID: 3449073365997655577, guid: c00d4b8ce18d41e4a94fd31fefb9d285, type: 2}
@@ -17558,7 +17558,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 228.9
+  m_fontSize: 211.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17594,7 +17594,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -69.938515, y: -80.66344, z: -1349.7639, w: -196.7797}
+  m_margin: {x: -69.938515, y: -80.66344, z: -1821.2461, w: -196.7797}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -19121,7 +19121,7 @@ GameObject:
   - component: {fileID: 1772654982}
   - component: {fileID: 1772654983}
   m_Layer: 0
-  m_Name: InstructionSceneManager
+  m_Name: MenuManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19151,9 +19151,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1772654980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c7e4f83f7cdfa44a8e165130f5c52c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 15250de0acab7b64581c4946331bda34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerObject: {fileID: 0}
+  menu: {fileID: 0}
 --- !u!1 &1775880266
 GameObject:
   m_ObjectHideFlags: 0
