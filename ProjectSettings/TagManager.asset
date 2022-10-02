@@ -68,6 +68,9 @@ TagManager:
   - name: Shield
     uniqueID: 4290986077
     locked: 0
-  - name: UI
+  - name: BaseUI
     uniqueID: 28320135
+    locked: 0
+  - name: UpperUI
+    uniqueID: 3788873021
     locked: 0
