@@ -1,0 +1,4 @@
+repository "Phoenix-Zero@thuningstars@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
