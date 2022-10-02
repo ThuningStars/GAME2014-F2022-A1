@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
@@ -13,25 +15,49 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private Boundary verticalBoundary;
 
-    private bool isStartButtonClick = false;
-    private bool isPlayerFinishMoving = false;
+    private enum playerStates { MOVEIN, PATROL, MOVEAWAY, FINISHMOVING}
+    private playerStates playerState = playerStates.MOVEIN;
+    private float playerPatrolSpeed;
+
+    public void Start()
+    {
+        playerPatrolSpeed = player.GetComponent<PlayerPatrolBehaviour>().patrolSpeed;
+        player.GetComponent<PlayerPatrolBehaviour>().patrolSpeed = 0;
+    }
 
     public void Update()
     {
-        if (isStartButtonClick == true)
+        switch(playerState)
         {
-            player.transform.position += new Vector3(0.0f, 6.0f * Time.deltaTime, 0.0f);
+            case playerStates.MOVEIN:
+                player.transform.position += new Vector3(0.0f, 2.0f * Time.deltaTime, 0.0f);
+                if (player.transform.position.y >= -4.2f)
+                {
+                    playerState = playerStates.PATROL;
+                }
+                break;
 
-            if (player.transform.position.y > verticalBoundary.max)
-            {
-                isPlayerFinishMoving = true;
-            }
+            case playerStates.PATROL:
+                player.GetComponent<PlayerPatrolBehaviour>().patrolSpeed = playerPatrolSpeed;
+
+                break;
+
+            case playerStates.MOVEAWAY:
+                player.transform.position += new Vector3(0.0f, 6.0f * Time.deltaTime, 0.0f);
+
+                if (player.transform.position.y > verticalBoundary.max)
+                {
+                    playerState = playerStates.FINISHMOVING;
+                }
+
+                break;
+
+            case playerStates.FINISHMOVING:
+                SceneManager.LoadScene(sceneBuildIndex: 2);
+
+                break;
         }
 
-        if(isPlayerFinishMoving && isStartButtonClick)
-        {
-            SceneManager.LoadScene(sceneBuildIndex: 2);
-        }
     }
 
     public void QuitGame()
@@ -46,7 +72,7 @@ public class MenuManager : MonoBehaviour
     {
         menu.SetActive(false);
 
-        isStartButtonClick = true;
+        playerState = playerStates.MOVEAWAY;
         player.GetComponent<PlayerPatrolBehaviour>().patrolSpeed = 0;
     }
 
