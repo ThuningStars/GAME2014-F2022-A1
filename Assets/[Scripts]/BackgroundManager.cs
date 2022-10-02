@@ -8,7 +8,7 @@ public class BackgroundManager : MonoBehaviour
     public Boundary boundary;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Move();
         CheckBounds();
@@ -16,7 +16,7 @@ public class BackgroundManager : MonoBehaviour
 
     public void Move()
     {
-        transform.position -= new Vector3(0.0f, verticalSpeed * Time.deltaTime, 0.0f);
+        transform.position -= new Vector3(0.0f, verticalSpeed * Time.fixedDeltaTime, 0.0f);
     }
 
     public void CheckBounds()
