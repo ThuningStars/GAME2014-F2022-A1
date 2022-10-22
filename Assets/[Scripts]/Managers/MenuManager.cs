@@ -39,6 +39,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
+        DontDestroyOnLoad(gameObject);
         Initialize();
     }
 
