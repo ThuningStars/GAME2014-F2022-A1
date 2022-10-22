@@ -7,18 +7,20 @@
 //Last Modified On : 10/02/2022 5:45 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Moved PlayerState to PlayerPatrolBehaviour.cs
-//                   => Clean Code and Add comments
+//                   => Clean Code and Add comments => add SFX for button click
 //Description : Class for manage all the scenes that has menu or buttons and work with the button click.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Media;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
 public class MenuManager : MonoBehaviour
 {
     // if we need the player or menu do something
@@ -30,12 +32,24 @@ public class MenuManager : MonoBehaviour
     // only used for easier to get Player state
     private PlayerPatrolBehaviour player;
 
+    //SFX
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip buttonClick;
+
     private void Start()
+    {
+        Initialize();
+    }
+
+    private void Initialize()
     {
         // if player gameobjecy has been assigned
         // because instruction, play scene don't need player to patrol
         if (playerObject != null)
             player = playerObject.GetComponent<PlayerPatrolBehaviour>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Update()
@@ -50,7 +64,10 @@ public class MenuManager : MonoBehaviour
 
     // work with quit button
     public void QuitGame()
-    {
+    {        
+        // sfx
+        audioSource.PlayOneShot(buttonClick);
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
@@ -66,18 +83,27 @@ public class MenuManager : MonoBehaviour
 
         if (player != null)
             player.SetPlayerState(PlayerPatrolBehaviour.playerStates.MOVEAWAY);
+
+        // sfx
+        audioSource.PlayOneShot(buttonClick);
     }
 
     // work with instruction button
     public void GoToInstructionScreen()
     {
         SceneManager.LoadScene(sceneBuildIndex: 1);
+
+        // sfx
+        audioSource.PlayOneShot(buttonClick);
     }
 
     // work with menu button and back button on instruction scene
     public void GoToMenuScreen()
     {
         SceneManager.LoadScene(sceneBuildIndex: 0);
+
+        // sfx
+        audioSource.PlayOneShot(buttonClick);
     }
 
     // work with the debug temp button in play scene
