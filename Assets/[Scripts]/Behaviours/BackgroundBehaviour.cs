@@ -10,21 +10,13 @@
 //                   if level change
 //Description : Class for manage the scrolling background, needs 2 background gameobject to make it smoother
 //               and also scale for different devices
-//              The code is from in class lab
+//              The moving code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
-//public enum GroundLevel
-//{
-//    FIRST,
-//    SECOND,
-//    TRANSITION,
-//    BOSS
-//}
 
 public enum BackgroundType
 {
@@ -64,9 +56,6 @@ public class BackgroundBehaviour : MonoBehaviour
 
     private void Update()
     {
-        //if(BackgroundManager.Instance.isChangeLevel())
-        //{
-
         if(Input.GetKeyDown(KeyCode.Q))
         {
             BackgroundManager.Instance.SetGameLevel(LevelState.SECOND);
@@ -97,7 +86,7 @@ public class BackgroundBehaviour : MonoBehaviour
     {
         if (backgroundType == BackgroundType.GROUND)
         {
-            if (transitionMap.active == true)
+            if (transitionMap.activeSelf == true)
             {
                 transitionMap.SetActive(false);
             }
