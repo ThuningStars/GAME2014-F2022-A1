@@ -27,6 +27,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     [Header("Bullet Properties")]
     public Transform bulletSpawnPoint;
+    public Transform bulletSpawnPoint2;
+
     public float fireRate = 0.2f;
 
 
@@ -143,5 +145,7 @@ public class PlayerBehaviour : MonoBehaviour
     void FireBullets()
     {
         var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletType.PLAYER);
+        var bullet2 = bulletManager.GetBullet(bulletSpawnPoint2.position,transform.position, BulletType.SECONDENEMY);
+
     }
 }

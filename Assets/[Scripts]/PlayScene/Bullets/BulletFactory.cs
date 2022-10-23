@@ -4,9 +4,9 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:31 AM
-//Last Modified On : 10/23/2022 02:23 AM
+//Last Modified On : 10/23/2022 01:54 PM
 //Copy Rights : SkyeHouse Intelligence
-//Rivision Histrory: Create file
+//Rivision Histrory: Create file => add more sprites for enemy bullets
 //Description : script for control all the bullet properties : direction, rotation, sprite
 //              The code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,55 +23,31 @@ public class BulletFactory : MonoBehaviour
 
     // Sprite Textures
     private Sprite playerBulletSprite;
-    private Sprite enemyBulletSprite;
+    private Sprite enemyGreenBulletSprite;
+    private Sprite enemyRedBulletSprite;
+    private Sprite enemyBlueBulletSprite;
 
     // Bullet Parent
     private Transform bulletParent;
-
-    // Adapt portrait and landscape mode
-    private bool isPortrait;
 
     // Start is called before the first frame update
     void Start()
     {
         Initialize();
-
-        if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
-            Screen.orientation == ScreenOrientation.LandscapeRight)
-        {
-            isPortrait = false;
-
-        }
-        else if (Screen.orientation == ScreenOrientation.PortraitUpsideDown ||
-                 Screen.orientation == ScreenOrientation.Portrait)
-        {
-            isPortrait = true;
-        }
-    }
-
-    private void Update()
-    {
-        if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
-            Screen.orientation == ScreenOrientation.LandscapeRight)
-        {
-            isPortrait = false;
-
-        }
-        else if (Screen.orientation == ScreenOrientation.PortraitUpsideDown ||
-                 Screen.orientation == ScreenOrientation.Portrait)
-        {
-            isPortrait = true;
-        }
     }
 
     private void Initialize()
     {
-        playerBulletSprite = Resources.Load<Sprite>("Sprites/Bullet");
-        enemyBulletSprite = Resources.Load<Sprite>("Sprites/EnemySmallBullet");
+        playerBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Player/Projectile/PlayerBullet");
+        enemyRedBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletRed");
+        enemyGreenBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletGreen");
+        enemyBlueBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletBlue");
+
         bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
         bulletParent = GameObject.Find("Bullets").transform;
     }
 
+    // create bullets with static direction
     public GameObject CreateBullet(BulletType type)
     {
         GameObject bullet = Instantiate(bulletPrefab, Vector3.zero, Quaternion.identity, bulletParent);
@@ -80,43 +56,53 @@ public class BulletFactory : MonoBehaviour
         switch (type)
         {
             case BulletType.PLAYER:
-                if(isPortrait)
-                {
-                    bullet.GetComponent<SpriteRenderer>().sprite = playerBulletSprite;
-                    bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.UP);
-                    bullet.name = "PlayerBullet";
-                    break;
-                }
-                else
-                {
-                    bullet.GetComponent<SpriteRenderer>().sprite = playerBulletSprite;
-                    bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.RIGHT);
-                    bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
-                    bullet.name = "PlayerBullet";
-                    break;
-                }
-            case BulletType.ENEMY:
-                if (isPortrait)
-                {
-                    bullet.GetComponent<SpriteRenderer>().sprite = enemyBulletSprite;
-                    bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.DOWN);
-                    bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-                    bullet.name = "EnemyBullet";
-                    break;
-                }
-                else
-                {
-                    bullet.GetComponent<SpriteRenderer>().sprite = enemyBulletSprite;
-                    bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.LEFT);
-                    bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
-                    bullet.name = "EnemyBullet";
-                    break;
-                }
+
+                bullet.GetComponent<SpriteRenderer>().sprite = playerBulletSprite;
+                bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.UP, 6);
+                bullet.name = "PlayerBullet";
+                break;
+
+            case BulletType.FIRSTENEMY:
+
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyRedBulletSprite;
+                bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.UP, 6);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                bullet.name = "FirstEnemyBullet";
+                break;
+
+            case BulletType.SECONDENEMY:
+
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                bullet.name = "SecondEnemyBullet";
+                break;
 
         }
 
         bullet.SetActive(false);
         return bullet;
     }
+
+    // create bullets with given direction
+    public GameObject CreateBullet(Vector2 direction, BulletType type)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, Vector3.zero, Quaternion.identity, bulletParent);
+        bullet.GetComponent<BulletBehaviour>().bulletType = type;
+
+        switch (type)
+        {
+            case BulletType.SECONDENEMY:
+
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
+                bullet.GetComponent<BulletBehaviour>().SetDirection(direction, 6);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                bullet.name = "SecondEnemyBullet";
+                break;
+        }
+
+        bullet.SetActive(false);
+        return bullet;
+    }
+
 
 }

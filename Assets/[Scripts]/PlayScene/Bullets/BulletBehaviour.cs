@@ -3,8 +3,10 @@
 //FileType: Unity C# Source file
 //Author : Wanbo. Wang
 //StudentID : 101265108
-//Last Modified On : 10/22/2022 
-//Rivision Histrory: Create file
+//Created On : 10/23/2022 02:31 AM
+//Last Modified On : 10/23/2022 01:48 PM
+//Copy Rights : SkyeHouse Intelligence
+//Rivision Histrory: Create file => add overload function for different direction setting(static & none-static)
 //Description : script for all the bullet behaviours : move, respawn, behaviour, collision check
 //              The main code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +29,6 @@ public class BulletBehaviour: MonoBehaviour
 {
     [Header("Bullet Properties")]
     public BulletDirection bulletDirection;
-    public float speed;
     public ScreenBounds bounds;
     public BulletType bulletType;
 
@@ -35,37 +36,29 @@ public class BulletBehaviour: MonoBehaviour
     private BulletManager bulletManager;
 
     private Vector2 screenWorldSize;
-    private bool isPortrait;
 
     void Start()
     {
-        AdaptOrientations();
-
-        if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
-            Screen.orientation == ScreenOrientation.LandscapeRight)
-        {
-            isPortrait = false;
-
-        }
-        else if (Screen.orientation == ScreenOrientation.PortraitUpsideDown ||
-                 Screen.orientation == ScreenOrientation.Portrait)
-        {
-            isPortrait = true;
-        }
+        AdaptScreenSize();
 
         bulletManager = FindObjectOfType<BulletManager>();
+
+        switch(bulletType)
+        {
+            case BulletType.PLAYER:
+                gameObject.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                break;
+        }
     }
 
     void Update()
     {
-        CheckCurrentOrientation();
-        AdaptOrientations();
         Move();
         CheckBounds();
         
     }
 
-    private void AdaptOrientations()
+    private void AdaptScreenSize()
     {
         screenWorldSize = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
@@ -90,32 +83,9 @@ public class BulletBehaviour: MonoBehaviour
             bulletManager.ReturnBullet(this.gameObject, bulletType);
         }
     }
-
-    void CheckCurrentOrientation()
-    {
-        if(isPortrait)
-        {
-            if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
-                Screen.orientation == ScreenOrientation.LandscapeRight)
-            {
-                isPortrait = false;
-                Destroy(gameObject);
-                bulletManager.ResetBullet();
-            }
-        }
-        else
-        {
-            if (Screen.orientation == ScreenOrientation.PortraitUpsideDown ||
-                Screen.orientation == ScreenOrientation.Portrait)
-            {
-                isPortrait = true;
-                Destroy(gameObject);
-                bulletManager.ResetBullet();
-            }
-        }
-    }
-
-    public void SetDirection(BulletDirection direction)
+    
+    // static direction and speed
+    public void SetDirection(BulletDirection direction, float speed)
     {
         switch (direction)
         {
@@ -134,10 +104,17 @@ public class BulletBehaviour: MonoBehaviour
         }
     }
 
+    // with given direction and set speed
+    public void SetDirection(Vector2 direction, float speed)
+    {
+        var directionNormal = direction.normalized;
+        velocity = directionNormal * speed;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if ((bulletType == BulletType.PLAYER) ||
-            (bulletType == BulletType.ENEMY && other.gameObject.CompareTag("Player")))
+            (bulletType == BulletType.FIRSTENEMY && other.gameObject.CompareTag("Player")))
         {
             bulletManager.ReturnBullet(this.gameObject, bulletType);
         }
