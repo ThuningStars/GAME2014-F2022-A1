@@ -4,7 +4,7 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/02/2022 11:09 AM
-//Last Modified On : 10/02/2022 5:45 PM
+//Last Modified On : 10/22/2022 4:04 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Moved PlayerState to PlayerPatrolBehaviour.cs
 //                   => Clean Code and Add comments => add SFX for button click
@@ -29,7 +29,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private GameObject menu;
 
-    // only used for easier to get Player state
+    // only used for easier to get Player gameLevel
     private PlayerPatrolBehaviour player;
 
     //SFX

@@ -6,7 +6,7 @@
 //Created On : 10/02/2022 10:21 AM
 //Last Modified On : 10/02/2022 5:25 PM
 //Copy Rights : SkyeHouse Intelligence
-//Rivision Histrory: Create file => Moved player state from MenuManager.cs to here for clean code
+//Rivision Histrory: Create file => Moved player gameLevel from MenuManager.cs to here for clean code
 //                   => Add Comments
 //Description : Class for make player can move in/out, patroll in the scene (Menu,End Scene)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public class PlayerPatrolBehaviour : MonoBehaviour
 
                 break;
 
-            // this is just a state that tells MenuManager can push to next scene
+            // this is just a gameLevel that tells MenuManager can push to next scene
             case playerStates.FINISHMOVING:
 
                 break;
@@ -99,7 +99,7 @@ public class PlayerPatrolBehaviour : MonoBehaviour
 
     }
 
-    // the state getter and setter
+    // the gameLevel getter and setter
     public playerStates GetPlayerState()
     {
         return playerState;
