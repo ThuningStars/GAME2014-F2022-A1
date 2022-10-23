@@ -9,7 +9,7 @@
 //Rivision Histrory: Create file
 //Description : script for manage player properties : moving, gain score, get pickups, firing, use ray
 //              weapon
-//              The code is from in class lab
+//              The initial code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
@@ -20,8 +20,9 @@ public class PlayerBehaviour : MonoBehaviour
 {
     [Header("Player Properties")]
     public float speed = 2.0f;
-    public Boundary boundary;
-    public float fixedPosition;
+    public Boundary horizontalBoundary;
+    public Boundary verticalBoundary;
+
     public float playerSpeed = 10.0f;
     public bool usingMobileInput = false;
 
@@ -36,7 +37,6 @@ public class PlayerBehaviour : MonoBehaviour
     //private ScoreManager scoreManager;
     private BulletManager bulletManager;
     private Vector2 screenWorldSize;
-    private bool isPortrait;
 
     void Start()
     {
@@ -79,26 +79,12 @@ public class PlayerBehaviour : MonoBehaviour
     {
         screenWorldSize = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
-        if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
-            Screen.orientation == ScreenOrientation.LandscapeRight)
-        {
-            isPortrait = false;
-            boundary.max = screenWorldSize.y - 0.6f;
-            boundary.min = -screenWorldSize.y + 0.6f;
-            transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
-            fixedPosition = -screenWorldSize.x + 1.0f;
+        horizontalBoundary.max = screenWorldSize.x - 0.6f;
+        horizontalBoundary.min = -screenWorldSize.x + 0.6f;
+        verticalBoundary.max = 0.0f;
+        verticalBoundary.min = -screenWorldSize.y + 0.5f;
+        transform.localRotation = Quaternion.identity;
 
-        }
-        else if (Screen.orientation == ScreenOrientation.PortraitUpsideDown ||
-                 Screen.orientation == ScreenOrientation.Portrait)
-        {
-            isPortrait = true;
-            boundary.max = screenWorldSize.x - 0.6f;
-            boundary.min = -screenWorldSize.x + 0.6f;
-            transform.localRotation = Quaternion.identity;
-            fixedPosition = -screenWorldSize.y + 1.0f;
-
-        }
     }
 
     public void MobileInput()
@@ -112,40 +98,24 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void ConventionalInput()
     {
-        if (isPortrait)
-        {
-            float x = Input.GetAxisRaw("Horizontal") * Time.deltaTime * speed;
-            transform.position += new Vector3(x, 0.0f, 0.0f);
-        }
-        else
-        {
-            float y = Input.GetAxisRaw("Horizontal") * Time.deltaTime * speed;
-            transform.position += new Vector3(0.0f, y, 0.0f);
-        }
+        float x = Input.GetAxisRaw("Horizontal") * Time.deltaTime * speed;
+        transform.position += new Vector3(x, 0.0f, 0.0f);
+
+        float y = Input.GetAxisRaw("Vertical") * Time.deltaTime * speed;
+        transform.position += new Vector3(0.0f, y, 0.0f);
     }
 
     public void Move()
     {
-        float clampedPosition;
-
-        if (isPortrait)
-        {
-            clampedPosition = Mathf.Clamp(transform.position.x, boundary.min, boundary.max);
-
-            transform.position = new Vector2(clampedPosition, fixedPosition);
-        }
-        else
-        {
-            clampedPosition = Mathf.Clamp(transform.position.y, boundary.min, boundary.max);
-
-            transform.position = new Vector2(fixedPosition, clampedPosition);
-        }
+        float clampedXPosition = Mathf.Clamp(transform.position.x, horizontalBoundary.min, horizontalBoundary.max);
+        float clampedYPosition = Mathf.Clamp(transform.position.y, verticalBoundary.min, verticalBoundary.max);
+        transform.position = new Vector2(clampedXPosition, clampedYPosition);
     }
 
     void FireBullets()
     {
         var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletType.PLAYER);
-        var bullet2 = bulletManager.GetBullet(bulletSpawnPoint2.position,transform.position, BulletType.SECONDENEMY);
+        var bullet2 = bulletManager.GetBullet(bulletSpawnPoint2.position, BulletType.PLAYER);
 
     }
 }

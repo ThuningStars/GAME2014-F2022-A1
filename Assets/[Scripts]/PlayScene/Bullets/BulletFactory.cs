@@ -65,15 +65,16 @@ public class BulletFactory : MonoBehaviour
             case BulletType.FIRSTENEMY:
 
                 bullet.GetComponent<SpriteRenderer>().sprite = enemyRedBulletSprite;
-                bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.UP, 6);
-                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.DOWN, 3);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, - 135.0f);
                 bullet.name = "FirstEnemyBullet";
                 break;
 
             case BulletType.SECONDENEMY:
 
                 bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
-                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
+                bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.DOWN, 3);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, - 135.0f);
                 bullet.name = "SecondEnemyBullet";
                 break;
 

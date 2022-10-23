@@ -56,11 +56,11 @@ public class BackgroundBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q))
+        if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             BackgroundManager.Instance.SetGameLevel(LevelState.SECOND);
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             BackgroundManager.Instance.SetGameLevel(LevelState.BOSS);
         }

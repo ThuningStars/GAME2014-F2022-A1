@@ -7,7 +7,7 @@
 //Last Modified On : 10/02/2022 5:20 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Add comments
-//Description : A struct for determine the boundary either for screen bound or other bounds
+//Description : A struct for determine the horizontalBoundary either for screen bound or other bounds
 //              Used with Player Patrol Behaviour, Spawn Enemy and Scrolling Background
 //              The code is from in class lab.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

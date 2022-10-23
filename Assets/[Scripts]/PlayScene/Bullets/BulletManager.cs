@@ -164,6 +164,19 @@ public class BulletManager : MonoBehaviour
                     activeFirstEnemyBullets++;
                 }
                 break;
+
+            case BulletType.SECONDENEMY:
+                {
+                    if (secondEnemyBulletPool.Count < 1)
+                    {
+                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.SECONDENEMY));
+                    }
+                    bullet = secondEnemyBulletPool.Dequeue();
+                    // stats
+                    secondEnemyBulletCount = secondEnemyBulletPool.Count;
+                    activeSecondEnemyBullets++;
+                }
+                break;
         }
 
         if(bullet != null)
