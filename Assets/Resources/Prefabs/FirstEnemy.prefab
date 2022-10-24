@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 431518272104597321}
   - component: {fileID: 431518272104597322}
   - component: {fileID: 431518272104597326}
-  - component: {fileID: 1909568563}
+  - component: {fileID: 6426768126843196517}
   m_Layer: 0
   m_Name: FirstEnemy
   m_TagString: Enemy
@@ -146,7 +146,7 @@ MonoBehaviour:
     max: 0
   horizontalSpeed: 0
   verticalSpeed: 1.5
-  healthValue: 1
+  healthValue: 3
   timeOfResetInTotal: 4
   spawnInSeconds: 7
   spawnXAxisListIndexOrder: 01000000030000000500000004000000
@@ -154,12 +154,13 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 431518272972901563}
   waveSpawnPoint: {fileID: 0}
   waveSpawnPoint2: {fileID: 0}
-  fireRate: 1
+  fireRate: 1.5
   bulletType: 0
-  audioSource: {fileID: 1909568563}
+  audioSource: {fileID: 0}
+  localAudioSource: {fileID: 0}
   fire: {fileID: 8300000, guid: 8d9a86fa8b74743469e2687aa3c804c6, type: 3}
   explode: {fileID: 8300000, guid: e80d49dd6e63ff346a910e25d0b1f402, type: 3}
---- !u!82 &1909568563
+--- !u!82 &6426768126843196517
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,8 +171,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.762
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

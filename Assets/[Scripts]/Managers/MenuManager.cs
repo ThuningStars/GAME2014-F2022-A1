@@ -4,16 +4,18 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/02/2022 11:09 AM
-//Last Modified On : 10/23/2022 09:38 PM
+//Last Modified On : 10/24/2022 04:55 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Moved PlayerState to PlayerPatrolBehaviour.cs
 //                   => Clean Code and Add comments => add SFX for button click => add pause button click
+//                   => fixed bug
 //Description : Class for manage all the scenes that has menu or buttons and work with the button click.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
 using System.Collections.Generic;
 using System.Media;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -29,6 +31,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private GameObject menu;
 
+    public TMP_Text score;
+
     // only used for easier to get Player gameLevel
     private PlayerPatrolBehaviour player;
 
@@ -41,7 +45,6 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
         Initialize();
     }
 
@@ -52,11 +55,17 @@ public class MenuManager : MonoBehaviour
         if (playerObject != null)
             player = playerObject.GetComponent<PlayerPatrolBehaviour>();
 
-        audioSource = GetComponent<AudioSource>();
+        audioSource = GameObject.Find("SFX").GetComponent<AudioSource>();
     }
 
     public void Update()
     {
+
+        if(score != null)
+        {
+            score.text = PlayerPrefs.GetInt("score").ToString();
+        }
+
         // if player need to do sth and if player avator already outside the screen then we can push to play scene
         if (player != null)
             if (player.GetPlayerState() == PlayerPatrolBehaviour.playerStates.FINISHMOVING)

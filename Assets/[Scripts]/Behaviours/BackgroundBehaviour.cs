@@ -4,7 +4,7 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/02/2022 04:23 AM
-//Last Modified On : 10/23/2022 02:23 AM
+//Last Modified On : 10/23/2022 06:22 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Add comments => change name => scale background sprite => switch background
 //                   if level change => debug
@@ -52,18 +52,6 @@ public class BackgroundBehaviour : MonoBehaviour
     {
         Move();
         CheckBounds();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            BackgroundManager.Instance.SetGameLevel(LevelState.SECOND);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            BackgroundManager.Instance.SetGameLevel(LevelState.BOSS);
-        }
     }
 
     // scroll the bakcground with an assigned speed with fixed deltatime to avoid frame drop problem

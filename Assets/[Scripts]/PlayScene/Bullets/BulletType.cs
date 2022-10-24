@@ -19,8 +19,6 @@ public enum BulletType
 {
     FIRSTENEMY,
     SECONDENEMY,
-    THIRDENEMY,
-    ENEMYROCKET,
     ENEMYWAVE,
     PLAYER,
 }

@@ -4,9 +4,9 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:31 AM
-//Last Modified On : 10/23/2022 01:54 PM
+//Last Modified On : 10/24/2022 04:58 AM
 //Copy Rights : SkyeHouse Intelligence
-//Rivision Histrory: Create file => add more sprites for enemy bullets
+//Rivision Histrory: Create file => add more sprites for enemy bullets => add more kinds of enemies, fixed bug
 //Description : script for control all the bullet properties : direction, rotation, sprite
 //              The code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +80,13 @@ public class BulletFactory : MonoBehaviour
                 bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -135.0f);
                 bullet.name = "SecondEnemyBullet";
                 break;
+
+            case BulletType.ENEMYWAVE:
+
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyWaveSprite;
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -135.0f);
+                bullet.name = "ThirdEnemyBullet";
+                break;
         }
 
         bullet.SetActive(false);
@@ -96,8 +103,8 @@ public class BulletFactory : MonoBehaviour
         {
             case BulletType.ENEMYWAVE:
 
-                bullet.GetComponent<SpriteRenderer>().sprite = enemyWaveSprite;
-                bullet.GetComponent<BulletBehaviour>().SetDirection(direction, 1);
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
+                bullet.GetComponent<BulletBehaviour>().SetDirection(direction, 6);
                 bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -135.0f);
                 bullet.name = "ThirdEnemyBullet";
                 break;

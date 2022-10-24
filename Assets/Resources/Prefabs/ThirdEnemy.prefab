@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 5220322432373655838}
   - component: {fileID: 3518826246668942709}
   - component: {fileID: 6265809928170685154}
-  - component: {fileID: 970215916}
+  - component: {fileID: 3225942573312472306}
   m_Layer: 0
   m_Name: ThirdEnemy
   m_TagString: Enemy
@@ -208,9 +208,9 @@ MonoBehaviour:
   screenBounds:
     min: 0
     max: 0
-  horizontalSpeed: 0
-  verticalSpeed: 1.5
-  healthValue: 20
+  horizontalSpeed: 0.8
+  verticalSpeed: 1
+  healthValue: 17
   timeOfResetInTotal: 0
   spawnInSeconds: 0
   spawnXAxisListIndexOrder: 
@@ -218,12 +218,13 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 7809967326211410670}
   waveSpawnPoint: {fileID: 1879076849}
   waveSpawnPoint2: {fileID: 2014672939}
-  fireRate: 0.5
-  bulletType: 4
-  audioSource: {fileID: 970215916}
+  fireRate: 0.7
+  bulletType: 2
+  audioSource: {fileID: 0}
+  localAudioSource: {fileID: 0}
   fire: {fileID: 8300000, guid: 8d9a86fa8b74743469e2687aa3c804c6, type: 3}
   explode: {fileID: 8300000, guid: e80d49dd6e63ff346a910e25d0b1f402, type: 3}
---- !u!82 &970215916
+--- !u!82 &3225942573312472306
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,8 +235,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.762
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

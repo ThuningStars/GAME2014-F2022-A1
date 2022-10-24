@@ -4,10 +4,11 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:31 AM
-//Last Modified On : 10/23/2022 09:02 PM
+//Last Modified On : 10/24/2022 06:10 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => add all kinds of enemy bullets, and overload function for different
 //                   bullet behaviour(static and non static direction) => delete some enemies
+//                   => apply damage for bullets
 //Description : script for control the bullet instance, spawn(dequeue) and delete(enqueue)
 //              The code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,19 +37,14 @@ public class BulletManager : MonoBehaviour
     public int secondEnemyBulletCount = 0;
     public int activeSecondEnemyBullets = 0;
     [Range(10, 50)]
-    public int thirdEnemyBulletNumber = 50;
-    public int thirdEnemyBulletCount = 0;
-    public int activeThirdEnemyBullets = 0;
-    [Range(10, 50)]
     public int thirdEnemyWaveBulletNumber = 50;
     public int thirdEnemyWaveBulletCount = 0;
-    public int thirdForthEnemyWaveBullets = 0;
+    public int activethirdEnemyWaveBullets = 0;
 
     private BulletFactory factory;
     private Queue<GameObject> playerBulletPool;
     private Queue<GameObject> firstEnemyBulletPool;
     private Queue<GameObject> secondEnemyBulletPool;
-    private Queue<GameObject> thirdEnemyBulletPool;
     private Queue<GameObject> thirdEnemyWaveBulletPool; 
 
     // Start is called before the first frame update
@@ -57,8 +53,6 @@ public class BulletManager : MonoBehaviour
         playerBulletPool = new Queue<GameObject>(); // creates an empty queue container
         firstEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
         secondEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
-        thirdEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
-        thirdEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
         thirdEnemyWaveBulletPool = new Queue<GameObject>(); // creates an empty queue container
 
         factory = GameObject.FindObjectOfType<BulletFactory>();
@@ -82,11 +76,6 @@ public class BulletManager : MonoBehaviour
             secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.SECONDENEMY));
         }
 
-        for (int i = 0; i < thirdEnemyBulletNumber; i++)
-        {
-            thirdEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.THIRDENEMY));
-        }
-
         for (int i = 0; i < thirdEnemyWaveBulletNumber; i++)
         {
             thirdEnemyWaveBulletPool.Enqueue(factory.CreateBullet(BulletType.ENEMYWAVE));
@@ -97,7 +86,6 @@ public class BulletManager : MonoBehaviour
         firstEnemyBulletCount = firstEnemyBulletPool.Count;
         secondEnemyBulletCount = secondEnemyBulletPool.Count;
 
-        thirdEnemyBulletCount = thirdEnemyBulletPool.Count;
         thirdEnemyWaveBulletCount = thirdEnemyWaveBulletPool.Count;
 
     }
@@ -150,21 +138,6 @@ public class BulletManager : MonoBehaviour
                     activeSecondEnemyBullets++;
                 }
                 break;
-
-            case BulletType.THIRDENEMY:
-                {
-                    if (secondEnemyBulletPool.Count < 1)
-                    {
-                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.THIRDENEMY));
-                    }
-                    bullet = secondEnemyBulletPool.Dequeue();
-                    bullet.GetComponent<BulletBehaviour>().damageValue = 15;
-
-                    // stats
-                    secondEnemyBulletCount = secondEnemyBulletPool.Count;
-                    activeSecondEnemyBullets++;
-                }
-                break;
         }
 
         if(bullet != null)
@@ -184,18 +157,17 @@ public class BulletManager : MonoBehaviour
         {
             case BulletType.ENEMYWAVE:
                 {
-                    if (secondEnemyBulletPool.Count < 1)
+                    if (thirdEnemyWaveBulletPool.Count < 1)
                     {
-                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(bulletPosition - characterPos, BulletType.ENEMYWAVE));
+                        thirdEnemyWaveBulletPool.Enqueue(factory.CreateBullet(bulletPosition - characterPos, BulletType.ENEMYWAVE));
                     }
-                    bullet = secondEnemyBulletPool.Dequeue();
-                    bullet.GetComponent<BulletBehaviour>().damageValue = 20;
+                    bullet = thirdEnemyWaveBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().SetDirection(bulletPosition - characterPos, 1);
+                    bullet.GetComponent<BulletBehaviour>().damageValue = 12;
 
-                    //set direction
-                    bullet.GetComponent<BulletBehaviour>().SetDirection(bulletPosition - characterPos, 6);
                     // stats
-                    secondEnemyBulletCount = secondEnemyBulletPool.Count;
-                    activeSecondEnemyBullets++;
+                    thirdEnemyWaveBulletCount = thirdEnemyWaveBulletPool.Count;
+                    activethirdEnemyWaveBullets++;
                 }
                 break;
         }
@@ -232,17 +204,11 @@ public class BulletManager : MonoBehaviour
                 secondEnemyBulletCount = secondEnemyBulletPool.Count;
                 activeSecondEnemyBullets--;
                 break;
-            case BulletType.THIRDENEMY:
-                thirdEnemyBulletPool.Enqueue(bullet);
-                //stats
-                thirdEnemyBulletCount = thirdEnemyBulletPool.Count;
-                activeThirdEnemyBullets--;
-                break;
             case BulletType.ENEMYWAVE:
                 thirdEnemyWaveBulletPool.Enqueue(bullet);
                 //stats
                 thirdEnemyWaveBulletCount = thirdEnemyWaveBulletPool.Count;
-                thirdForthEnemyWaveBullets--;
+                activethirdEnemyWaveBullets--;
                 break;
         }
     }

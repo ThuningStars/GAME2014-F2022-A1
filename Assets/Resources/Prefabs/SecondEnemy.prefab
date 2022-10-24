@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2379336184794283508}
   - component: {fileID: 6458786305412303263}
   - component: {fileID: 4576773027269522952}
-  - component: {fileID: 491261555}
+  - component: {fileID: 2265618435309592268}
   m_Layer: 0
   m_Name: SecondEnemy
   m_TagString: Enemy
@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 366416476866543108}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &1423876786405032685
 SpriteRenderer:
@@ -146,7 +146,7 @@ MonoBehaviour:
     max: 0
   horizontalSpeed: 0
   verticalSpeed: 1.5
-  healthValue: 10
+  healthValue: 12
   timeOfResetInTotal: 0
   spawnInSeconds: 0
   spawnXAxisListIndexOrder: 
@@ -154,12 +154,13 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 366416476866543108}
   waveSpawnPoint: {fileID: 0}
   waveSpawnPoint2: {fileID: 0}
-  fireRate: 1
+  fireRate: 2
   bulletType: 1
-  audioSource: {fileID: 491261555}
+  audioSource: {fileID: 0}
+  localAudioSource: {fileID: 0}
   fire: {fileID: 8300000, guid: 8d9a86fa8b74743469e2687aa3c804c6, type: 3}
   explode: {fileID: 8300000, guid: e80d49dd6e63ff346a910e25d0b1f402, type: 3}
---- !u!82 &491261555
+--- !u!82 &2265618435309592268
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,8 +171,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.762
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

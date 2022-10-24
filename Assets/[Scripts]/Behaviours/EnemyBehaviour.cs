@@ -4,10 +4,10 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:12 PM
-//Last Modified On : 10/23/2022 06:12 PM
+//Last Modified On : 10/24/2022 04:55 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => build corotine for spawn enemies, and list to store 7 x axis for spawning
-//                   => add blood and pickup properties
+//                   => add blood and damage properties => add ray collision check
 //Description : script for control the enemies behaviour : spawn, respawn
 //              The initial code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -25,9 +27,9 @@ public class EnemyBehaviour : MonoBehaviour
     public Boundary screenBounds;
     public float horizontalSpeed;
     public float verticalSpeed;
-    public int healthValue;
+    public float healthValue;
 
-    private int initialHealth;
+    private float initialHealth;
 
     //enemy reset property
     [Header("Enemy Reset Properties")]
@@ -52,6 +54,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("SFX Properties")]
     public AudioSource audioSource;
+    public AudioSource localAudioSource;
+
     public AudioClip fire;
     public AudioClip explode;
 
@@ -65,40 +69,37 @@ public class EnemyBehaviour : MonoBehaviour
     {
         initialHealth = healthValue;
         bulletManager = FindObjectOfType<BulletManager>();
+        localAudioSource = GetComponent<AudioSource>();
 
         AdaptOrientations();
         InvokeRepeating("FireBullets", 0.3f, fireRate);
 
-        audioSource = GetComponent<AudioSource>();
+        audioSource = GameObject.Find("SFX").GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (isMoving)
         {
             Move();
             CheckBounds();
 
-            if(healthValue <= 0)
+            if (healthValue <= 0)
             {
-                audioSource.PlayOneShot(explode);
-                isMoving = false; 
+                localAudioSource.PlayOneShot(explode);
+                isMoving = false;
                 transform.position = new Vector3(0.0f, screenBounds.max + 5.0f, 0.0f);
 
             }
         }
 
-    }
-
-    private void FixedUpdate()
-    {
         if (isStartSpawn)
         {
             spawnTimer += Time.deltaTime;
 
             if (spawnTimer >= spawnInSeconds)
             {
+                healthValue = initialHealth;
                 spawnTimer = 0.0f;
                 isMoving = true;
                 StartSpawnEnemy();
@@ -111,6 +112,12 @@ public class EnemyBehaviour : MonoBehaviour
         if (bulletType == BulletType.FIRSTENEMY || bulletType == BulletType.SECONDENEMY)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - verticalSpeed * Time.deltaTime, transform.position.z);
+        }
+        else
+        {
+            var horizontalLength = pingPongMoveBoundary.max - pingPongMoveBoundary.min;
+            transform.position = new Vector3(Mathf.PingPong(Time.time * horizontalSpeed, horizontalLength) - pingPongMoveBoundary.max,
+                transform.position.y - verticalSpeed * Time.deltaTime, transform.position.z);
         }
     }
 
@@ -125,9 +132,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     void FireBullets()
     {
-        if(healthValue > 0)
+        if(healthValue > 0 && gameObject.activeSelf && isMoving)
         {
-            if (bulletType == BulletType.FIRSTENEMY || bulletType == BulletType.SECONDENEMY || bulletType == BulletType.THIRDENEMY)
+            if (bulletType == BulletType.FIRSTENEMY || bulletType == BulletType.SECONDENEMY)
             {
                 audioSource.PlayOneShot(fire);
 
@@ -137,8 +144,8 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 audioSource.PlayOneShot(fire);
 
-                var bullet = bulletManager.GetBullet(waveSpawnPoint.position, transform.position, BulletType.ENEMYWAVE);
-                var bullet2 = bulletManager.GetBullet(waveSpawnPoint2.position, transform.position, BulletType.ENEMYWAVE);
+                var bullet = bulletManager.GetBullet(waveSpawnPoint.position, transform.position, bulletType);
+                var bullet2 = bulletManager.GetBullet(waveSpawnPoint2.position, transform.position, bulletType);
 
             }
         }
@@ -190,7 +197,6 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void StartSpawnEnemy()
     {
-        healthValue = initialHealth;
 
         if (timeOfReset >= timeOfResetInTotal)
         {
@@ -213,4 +219,62 @@ public class EnemyBehaviour : MonoBehaviour
 
         timeOfReset++;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ray"))
+        {
+            healthValue -= 100.0f * Time.deltaTime;
+
+            if (healthValue <= 0.0f)
+            {
+                int score = 0;
+                switch (bulletType)
+                {
+                    case BulletType.FIRSTENEMY:
+                        score = 50;
+                        break;
+                    case BulletType.SECONDENEMY:
+                        score = 75;
+                        break;
+                    case BulletType.ENEMYWAVE:
+                        score = 90;
+                        break;
+
+                }
+
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>().score += score;
+            }
+        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ray"))
+        {
+            healthValue -= 100.0f * Time.deltaTime;
+
+            if(healthValue <= 0.0f)
+            {
+                int score = 0;
+                switch (bulletType)
+                {
+                    case BulletType.FIRSTENEMY:
+                        score = 50;
+                        break;
+                    case BulletType.SECONDENEMY:
+                        score = 75;
+                        break;
+                    case BulletType.ENEMYWAVE:
+                        score = 90;
+                        break;
+
+                }
+
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>().score += score;
+            }
+        }
+    }
+
 }

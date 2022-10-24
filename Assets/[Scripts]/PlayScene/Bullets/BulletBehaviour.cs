@@ -4,9 +4,10 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:31 AM
-//Last Modified On : 10/23/2022 01:48 PM
+//Last Modified On : 10/24/2022 06:14 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => add overload function for different direction setting(static & none-static)
+//                   => apply score and health and damage.
 //Description : script for all the bullet behaviours : move, respawn, behaviour, collision check
 //              The main code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ public class BulletBehaviour: MonoBehaviour
     public int damageValue = 1;
 
     private Vector3 velocity;
-    private BulletManager bulletManager;
+    public BulletManager bulletManager;
 
     private Vector2 screenWorldSize;
 
@@ -58,7 +59,7 @@ public class BulletBehaviour: MonoBehaviour
 
         bounds.horizontal.max = screenWorldSize.x + 1.0f;
         bounds.horizontal.min = -screenWorldSize.x - 1.0f;
-        bounds.vertical.max = screenWorldSize.y + 1.0f;
+        bounds.vertical.max = screenWorldSize.y;
         bounds.vertical.min = -screenWorldSize.y - 1.0f;
     }
 
@@ -109,11 +110,33 @@ public class BulletBehaviour: MonoBehaviour
     {
         if (bulletType == BulletType.PLAYER)
         {
+            EnemyBehaviour enemy = other.gameObject.GetComponent<EnemyBehaviour>();
 
+            if(enemy != null)
+            {
+                enemy.healthValue -= damageValue;
 
-            other.gameObject.GetComponent<EnemyBehaviour>().healthValue -= damageValue;
-            bulletManager.ReturnBullet(this.gameObject, bulletType);
+                int score = 0;
 
+                if(enemy.healthValue <= 0)
+                {
+                    switch (enemy.bulletType)
+                    {
+                        case BulletType.FIRSTENEMY:
+                            score = 50;
+                            break;
+                        case BulletType.SECONDENEMY:
+                            score = 75;
+                            break;
+                        case BulletType.ENEMYWAVE:
+                            score = 90;
+                            break;
+
+                    }
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>().score += score;
+                }
+                bulletManager.ReturnBullet(this.gameObject, bulletType);
+            }
 
         }
 
