@@ -28,8 +28,9 @@ public class EnemyBehaviour : MonoBehaviour
     public int timeOfResetInTotal;
     public float spawnInSeconds;
     public List<int> spawnXAxisListIndexOrder = new List<int>();
+    public bool isBehindOthers = false;
     private int timeOfReset = 0;
-    public bool isStartSpawn = false;
+    private bool isStartSpawn = false;
     private float spawnTimer = 0.0f;
 
     [Header("Bullet Properties")]
@@ -163,13 +164,16 @@ public class EnemyBehaviour : MonoBehaviour
         }
         AdaptOrientations();
 
-        Debug.Log(timeOfReset);
-        Debug.Log(enemySpawnXAxisList.Count);
-        Debug.Log(spawnXAxisListIndexOrder.Count);
-
         int index = spawnXAxisListIndexOrder[timeOfReset];
 
-        transform.position = new Vector3(enemySpawnXAxisList[index], screenBounds.max, 0.0f);
+        if(isBehindOthers)
+        {
+            transform.position = new Vector3(enemySpawnXAxisList[index], screenBounds.max + 1.0f, 0.0f);
+        }
+        else
+        {
+            transform.position = new Vector3(enemySpawnXAxisList[index], screenBounds.max, 0.0f);
+        }
 
         timeOfReset++;
     }

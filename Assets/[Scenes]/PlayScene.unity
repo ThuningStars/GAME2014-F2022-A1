@@ -5730,18 +5730,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SecondEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 128091790420416737, guid: d2851b04688522a42b906cbd7c86f39a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4576773027269522952, guid: d2851b04688522a42b906cbd7c86f39a, type: 3}
-      propertyPath: fireRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4576773027269522952, guid: d2851b04688522a42b906cbd7c86f39a, type: 3}
-      propertyPath: verticalSpeed
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 5640982430634120845, guid: d2851b04688522a42b906cbd7c86f39a, type: 3}
       propertyPath: m_RootOrder
       value: 13

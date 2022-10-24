@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5640982430634120845
 Transform:
   m_ObjectHideFlags: 0
@@ -140,16 +140,17 @@ MonoBehaviour:
   pingPongMoveBoundary:
     min: 0
     max: 0
-  randomSpawnAixsBoundary:
-    min: 0
-    max: 0
   screenBounds:
     min: 0
     max: 0
   horizontalSpeed: 0
-  verticalSpeed: 0
+  verticalSpeed: 1.5
+  timeOfResetInTotal: 0
+  spawnInSeconds: 0
+  spawnXAxisListIndexOrder: 
+  isStartSpawn: 0
   bulletSpawnPoint: {fileID: 366416476866543108}
-  fireRate: 0.2
+  fireRate: 1
   bulletType: 1
 --- !u!1 &227543710806612679
 GameObject:
