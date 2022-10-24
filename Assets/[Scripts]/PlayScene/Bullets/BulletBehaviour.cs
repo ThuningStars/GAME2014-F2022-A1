@@ -31,6 +31,7 @@ public class BulletBehaviour: MonoBehaviour
     public BulletDirection bulletDirection;
     public ScreenBounds bounds;
     public BulletType bulletType;
+    public int damageValue = 1;
 
     private Vector3 velocity;
     private BulletManager bulletManager;
@@ -42,13 +43,6 @@ public class BulletBehaviour: MonoBehaviour
         AdaptScreenSize();
 
         bulletManager = FindObjectOfType<BulletManager>();
-
-        switch(bulletType)
-        {
-            case BulletType.PLAYER:
-                gameObject.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
-                break;
-        }
     }
 
     void Update()
@@ -113,12 +107,16 @@ public class BulletBehaviour: MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if ((bulletType == BulletType.PLAYER) ||
-            (bulletType == BulletType.FIRSTENEMY && other.gameObject.CompareTag("Player")))
+        if (bulletType == BulletType.PLAYER)
         {
+
+
+            other.gameObject.GetComponent<EnemyBehaviour>().healthValue -= damageValue;
             bulletManager.ReturnBullet(this.gameObject, bulletType);
+
+
         }
-        
+
     }
 
 }

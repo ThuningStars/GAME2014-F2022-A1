@@ -14,7 +14,10 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
+using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -26,17 +29,30 @@ public class PlayerBehaviour : MonoBehaviour
     public float playerSpeed = 10.0f;
     public bool usingMobileInput = false;
 
+    public int healthValue = 100;
+    public int powerValue = 50;
+    public int damage = 1;
+
     [Header("Bullet Properties")]
     public Transform bulletSpawnPoint;
     public Transform bulletSpawnPoint2;
 
     public float fireRate = 0.2f;
 
+    [Header("UI Properties")]
+    public Image healthBar;
+    public Image powerBar;
 
     private Camera camera;
     //private ScoreManager scoreManager;
     private BulletManager bulletManager;
     private Vector2 screenWorldSize;
+
+    [Header("SFX Properties")]
+    public AudioSource audioSource;
+    public AudioClip fire;
+    public AudioClip hurt;
+    public AudioClip explode;
 
     void Start()
     {
@@ -50,6 +66,8 @@ public class PlayerBehaviour : MonoBehaviour
         //scoreManager = FindObjectOfType<ScoreManager>();
 
         InvokeRepeating("FireBullets", 0.0f, fireRate);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -72,6 +90,21 @@ public class PlayerBehaviour : MonoBehaviour
         {
             //scoreManager.AddPoints(10);
         }
+
+        if(healthValue <= 0)
+        {
+            audioSource.PlayOneShot(explode);
+            SceneManager.LoadScene(sceneBuildIndex: 3);
+        }
+
+        UpdateUI();
+
+    }
+
+    private void UpdateUI()
+    {
+        healthBar.fillAmount = (float)healthValue / 100.0f;
+        powerBar.fillAmount = (float)powerValue / 100.0f;
 
     }
 
@@ -114,8 +147,34 @@ public class PlayerBehaviour : MonoBehaviour
 
     void FireBullets()
     {
+        audioSource.PlayOneShot(fire);
+
         var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletType.PLAYER);
         var bullet2 = bulletManager.GetBullet(bulletSpawnPoint2.position, BulletType.PLAYER);
 
+    }
+
+    public void AbilityButtonClick()
+    {
+
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Boss"))
+        {
+            audioSource.PlayOneShot(hurt);
+            healthValue -= 15;
+        }
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            audioSource.PlayOneShot(hurt);
+            healthValue -= 10;
+        }
+        else if (other.gameObject.CompareTag("Bullet"))
+        {
+            audioSource.PlayOneShot(hurt);
+            healthValue -= other.gameObject.GetComponent<BulletBehaviour>().damageValue;
+        }
     }
 }

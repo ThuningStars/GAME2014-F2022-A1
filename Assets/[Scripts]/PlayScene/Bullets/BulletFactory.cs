@@ -26,6 +26,7 @@ public class BulletFactory : MonoBehaviour
     private Sprite enemyGreenBulletSprite;
     private Sprite enemyRedBulletSprite;
     private Sprite enemyBlueBulletSprite;
+    private Sprite enemyWaveSprite;
 
     // Bullet Parent
     private Transform bulletParent;
@@ -42,6 +43,7 @@ public class BulletFactory : MonoBehaviour
         enemyRedBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletRed");
         enemyGreenBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletGreen");
         enemyBlueBulletSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyBulletBlue");
+        enemyWaveSprite = Resources.Load<Sprite>("Sprites/Characters/Enemy/Projectile/EnemyWave1");
 
         bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
         bulletParent = GameObject.Find("Bullets").transform;
@@ -59,6 +61,7 @@ public class BulletFactory : MonoBehaviour
 
                 bullet.GetComponent<SpriteRenderer>().sprite = playerBulletSprite;
                 bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.UP, 6);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
                 bullet.name = "PlayerBullet";
                 break;
 
@@ -72,12 +75,11 @@ public class BulletFactory : MonoBehaviour
 
             case BulletType.SECONDENEMY:
 
-                bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyBlueBulletSprite;
                 bullet.GetComponent<BulletBehaviour>().SetDirection(BulletDirection.DOWN, 3);
-                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, - 135.0f);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -135.0f);
                 bullet.name = "SecondEnemyBullet";
                 break;
-
         }
 
         bullet.SetActive(false);
@@ -92,12 +94,12 @@ public class BulletFactory : MonoBehaviour
 
         switch (type)
         {
-            case BulletType.SECONDENEMY:
+            case BulletType.ENEMYWAVE:
 
-                bullet.GetComponent<SpriteRenderer>().sprite = enemyGreenBulletSprite;
-                bullet.GetComponent<BulletBehaviour>().SetDirection(direction, 6);
-                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 45.0f);
-                bullet.name = "SecondEnemyBullet";
+                bullet.GetComponent<SpriteRenderer>().sprite = enemyWaveSprite;
+                bullet.GetComponent<BulletBehaviour>().SetDirection(direction, 1);
+                bullet.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -135.0f);
+                bullet.name = "ThirdEnemyBullet";
                 break;
         }
 

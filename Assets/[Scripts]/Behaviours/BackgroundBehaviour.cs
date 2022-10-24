@@ -7,7 +7,7 @@
 //Last Modified On : 10/23/2022 02:23 AM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Add comments => change name => scale background sprite => switch background
-//                   if level change
+//                   if level change => debug
 //Description : Class for manage the scrolling background, needs 2 background gameobject to make it smoother
 //               and also scale for different devices
 //              The moving code is from in class lab
@@ -86,10 +86,11 @@ public class BackgroundBehaviour : MonoBehaviour
     {
         if (backgroundType == BackgroundType.GROUND)
         {
-            if (transitionMap.activeSelf == true)
-            {
-                transitionMap.SetActive(false);
-            }
+            if(transitionMap != null)
+                if (transitionMap.activeSelf == true)
+                {
+                    transitionMap.SetActive(false);
+                }
         }
 
         if (isSwitchOnReset)

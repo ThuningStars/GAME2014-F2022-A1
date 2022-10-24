@@ -6,7 +6,7 @@
 //Created On : 10/23/2022 03:55 PM
 //Last Modified On : 10/23/2022 06:20 PM
 //Copy Rights : SkyeHouse Intelligence
-//Rivision Histrory: Create file => add more lists for different enemies
+//Rivision Histrory: Create file => add more lists for different enemies => set up time line for spawn enemies
 //Description : script for controlling the spawn for enemy
 // the initial code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,12 @@ public class GameController : MonoBehaviour
             enemy.SetActive(true);
             List<int> indexOrder = new List<int> { 1, 3, 5, 4 };
             enemy.GetComponent<EnemyBehaviour>().SpawnEnemy(4, 10.0f, indexOrder);
+
+            enemy = GetUnActiveEnemyInList(3);
+            enemy.SetActive(true);
+            indexOrder = new List<int> { 2 };
+            enemy.GetComponent<EnemyBehaviour>().SpawnEnemy(1, 10.0f, indexOrder);
+
         }
         // 30s - 60s
         else if (totalPlayTime >= 35.0f && timeLine < 35.0f)
@@ -210,6 +216,24 @@ public class GameController : MonoBehaviour
             return newEnemy;
 
         }
+        else if (enemyCount == 3)
+        {
+            for (int i = 0; i < thirdEnemyList.Count; i++)
+            {
+                if (!thirdEnemyList[i].activeSelf)
+                {
+                    return thirdEnemyList[i];
+                }
+            }
+
+            GameObject newEnemy = Instantiate(thirdEnemyPrefab);
+            newEnemy.SetActive(false);
+            thirdEnemyList.Add(newEnemy);
+            newEnemy.name = "ThirdEnemy";
+
+            return newEnemy;
+
+        }
 
         return null;
     }
@@ -218,6 +242,7 @@ public class GameController : MonoBehaviour
     {
         firstEnemyList = new List<GameObject>();
         secondEnemyList = new List<GameObject>();
+        thirdEnemyList = new List<GameObject>();
 
         for (var i = 0; i < 3; i++)
         {
@@ -232,6 +257,7 @@ public class GameController : MonoBehaviour
             var enemy = Instantiate(secondEnemyPrefab);
             enemy.SetActive(false);
             secondEnemyList.Add(enemy);
+            enemy.name = "SecondEnemy";
         }
 
         for (var i = 0; i < 4; i++)
@@ -239,6 +265,8 @@ public class GameController : MonoBehaviour
             var enemy = Instantiate(thirdEnemyPrefab);
             enemy.SetActive(false);
             thirdEnemyList.Add(enemy);
+            enemy.name = "ThirdEnemy";
+
         }
     }
 }

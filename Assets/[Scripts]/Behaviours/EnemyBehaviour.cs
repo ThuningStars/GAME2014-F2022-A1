@@ -7,10 +7,12 @@
 //Last Modified On : 10/23/2022 06:12 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => build corotine for spawn enemies, and list to store 7 x axis for spawning
-//Description : script for control the enemies behaviour : spawn, color, pingpong movement
+//                   => add blood and pickup properties
+//Description : script for control the enemies behaviour : spawn, respawn
 //              The initial code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -23,8 +25,12 @@ public class EnemyBehaviour : MonoBehaviour
     public Boundary screenBounds;
     public float horizontalSpeed;
     public float verticalSpeed;
+    public int healthValue;
+
+    private int initialHealth;
 
     //enemy reset property
+    [Header("Enemy Reset Properties")]
     public int timeOfResetInTotal;
     public float spawnInSeconds;
     public List<int> spawnXAxisListIndexOrder = new List<int>();
@@ -35,11 +41,19 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("Bullet Properties")]
     public Transform bulletSpawnPoint;
+    public Transform waveSpawnPoint;
+    public Transform waveSpawnPoint2;
+
     public float fireRate = 0.2f;
     public BulletType bulletType;
 
     private BulletManager bulletManager;
     private bool isMoving = true;
+
+    [Header("SFX Properties")]
+    public AudioSource audioSource;
+    public AudioClip fire;
+    public AudioClip explode;
 
     // spawn points for enemy to avoid enemy that hide behind another enemy situation
     private List<float> enemySpawnXAxisList = new List<float>();
@@ -49,10 +63,13 @@ public class EnemyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialHealth = healthValue;
         bulletManager = FindObjectOfType<BulletManager>();
 
         AdaptOrientations();
         InvokeRepeating("FireBullets", 0.3f, fireRate);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -62,6 +79,14 @@ public class EnemyBehaviour : MonoBehaviour
         {
             Move();
             CheckBounds();
+
+            if(healthValue <= 0)
+            {
+                audioSource.PlayOneShot(explode);
+                isMoving = false; 
+                transform.position = new Vector3(0.0f, screenBounds.max + 5.0f, 0.0f);
+
+            }
         }
 
     }
@@ -87,16 +112,12 @@ public class EnemyBehaviour : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - verticalSpeed * Time.deltaTime, transform.position.z);
         }
-        //var horizontalLength = pingPongMoveBoundary.max - pingPongMoveBoundary.min;
-        //transform.position = new Vector3(Mathf.PingPong(Time.time * horizontalSpeed, horizontalLength) - pingPongMoveBoundary.max,
-        //    transform.position.y - verticalSpeed * Time.deltaTime, transform.position.z);
     }
 
     public void CheckBounds()
     {
         if (transform.position.y < screenBounds.min)
         {
-            //ResetEnemy();
 
             isMoving = false;
         }
@@ -104,9 +125,22 @@ public class EnemyBehaviour : MonoBehaviour
 
     void FireBullets()
     {
-        if (bulletType == BulletType.FIRSTENEMY || bulletType == BulletType.SECONDENEMY)
+        if(healthValue > 0)
         {
-            var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, bulletType);
+            if (bulletType == BulletType.FIRSTENEMY || bulletType == BulletType.SECONDENEMY || bulletType == BulletType.THIRDENEMY)
+            {
+                audioSource.PlayOneShot(fire);
+
+                var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, bulletType);
+            }
+            else if (bulletType == BulletType.ENEMYWAVE)
+            {
+                audioSource.PlayOneShot(fire);
+
+                var bullet = bulletManager.GetBullet(waveSpawnPoint.position, transform.position, BulletType.ENEMYWAVE);
+                var bullet2 = bulletManager.GetBullet(waveSpawnPoint2.position, transform.position, BulletType.ENEMYWAVE);
+
+            }
         }
     }
 
@@ -156,6 +190,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void StartSpawnEnemy()
     {
+        healthValue = initialHealth;
+
         if (timeOfReset >= timeOfResetInTotal)
         {
             gameObject.SetActive(false);

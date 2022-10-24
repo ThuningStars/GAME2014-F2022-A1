@@ -4,10 +4,10 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/23/2022 02:31 AM
-//Last Modified On : 10/23/2022 01:48 PM
+//Last Modified On : 10/23/2022 09:02 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => add all kinds of enemy bullets, and overload function for different
-//                   bullet behaviour(static and non static direction)
+//                   bullet behaviour(static and non static direction) => delete some enemies
 //Description : script for control the bullet instance, spawn(dequeue) and delete(enqueue)
 //              The code is from in class lab
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,6 +19,9 @@ using UnityEngine;
 [System.Serializable]
 public class BulletManager : MonoBehaviour
 {
+    [Header("player")]
+    public PlayerBehaviour player;
+
     [Header("Bullet Properties")]
     [Range(10, 50)]
     public int playerBulletNumber = 50;
@@ -37,31 +40,16 @@ public class BulletManager : MonoBehaviour
     public int thirdEnemyBulletCount = 0;
     public int activeThirdEnemyBullets = 0;
     [Range(10, 50)]
-    public int thirdEnemyRocketNumber = 50;
-    public int thirdEnemyRocketCount = 0;
-    public int activeThirdEnemyRockets = 0;
-    [Range(10, 50)]
-    public int forthEnemyBulletNumber = 50;
-    public int forthEnemyBulletCount = 0;
-    public int activeForthEnemyBullets = 0;
-    [Range(10, 50)]
-    public int forthEnemyWaveBulletNumber = 50;
-    public int forthEnemyWaveBulletCount = 0;
-    public int activeForthEnemyWaveBullets = 0;
-    [Range(10, 50)]
-    public int fifthEnemyLayserNumber = 50;
-    public int fifthEnemyLayserCount = 0;
-    public int activeFifthEnemyLaysers = 0;
+    public int thirdEnemyWaveBulletNumber = 50;
+    public int thirdEnemyWaveBulletCount = 0;
+    public int thirdForthEnemyWaveBullets = 0;
 
     private BulletFactory factory;
     private Queue<GameObject> playerBulletPool;
     private Queue<GameObject> firstEnemyBulletPool;
     private Queue<GameObject> secondEnemyBulletPool;
     private Queue<GameObject> thirdEnemyBulletPool;
-    private Queue<GameObject> thirdEnemyRocketPool;
-    private Queue<GameObject> forthEnemyBulletPool;
-    private Queue<GameObject> forthEnemyWaveBulletPool; 
-    private Queue<GameObject> fifthEnemyLayserPool;
+    private Queue<GameObject> thirdEnemyWaveBulletPool; 
 
     // Start is called before the first frame update
     void Start()
@@ -70,10 +58,8 @@ public class BulletManager : MonoBehaviour
         firstEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
         secondEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
         thirdEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
-        thirdEnemyRocketPool = new Queue<GameObject>(); // creates an empty queue container
-        forthEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
-        forthEnemyWaveBulletPool = new Queue<GameObject>(); // creates an empty queue container
-        fifthEnemyLayserPool = new Queue<GameObject>(); // creates an empty queue container
+        thirdEnemyBulletPool = new Queue<GameObject>(); // creates an empty queue container
+        thirdEnemyWaveBulletPool = new Queue<GameObject>(); // creates an empty queue container
 
         factory = GameObject.FindObjectOfType<BulletFactory>();
         BuildBulletPools();
@@ -96,40 +82,23 @@ public class BulletManager : MonoBehaviour
             secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.SECONDENEMY));
         }
 
-        //for (int i = 0; i < thirdEnemyBulletNumber; i++)
-        //{
-        //    thirdEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.THIRDENEMY));
-        //}
+        for (int i = 0; i < thirdEnemyBulletNumber; i++)
+        {
+            thirdEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.THIRDENEMY));
+        }
 
-        //for (int i = 0; i < thirdEnemyRocketNumber; i++)
-        //{
-        //    thirdEnemyRocketPool.Enqueue(factory.CreateBullet(BulletType.ENEMYROCKET));
-        //}
-
-        //for (int i = 0; i < forthEnemyBulletNumber; i++)
-        //{
-        //    forthEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.FORTHENEMY));
-        //}
-
-        //for (int i = 0; i < forthEnemyWaveBulletNumber; i++)
-        //{
-        //    forthEnemyWaveBulletPool.Enqueue(factory.CreateBullet(BulletType.ENEMYWAYVE));
-        //}
-
-        //for (int i = 0; i < fifthEnemyLayserNumber; i++)
-        //{
-        //    fifthEnemyLayserPool.Enqueue(factory.CreateBullet(BulletType.LONGLAYSER));
-        //}
+        for (int i = 0; i < thirdEnemyWaveBulletNumber; i++)
+        {
+            thirdEnemyWaveBulletPool.Enqueue(factory.CreateBullet(BulletType.ENEMYWAVE));
+        }
 
         // stats
         playerBulletCount = playerBulletPool.Count;
         firstEnemyBulletCount = firstEnemyBulletPool.Count;
         secondEnemyBulletCount = secondEnemyBulletPool.Count;
+
         thirdEnemyBulletCount = thirdEnemyBulletPool.Count;
-        thirdEnemyRocketCount = thirdEnemyRocketPool.Count;
-        forthEnemyBulletCount = forthEnemyBulletPool.Count;
-        forthEnemyWaveBulletCount = forthEnemyWaveBulletPool.Count;
-        fifthEnemyLayserCount = fifthEnemyLayserPool.Count;
+        thirdEnemyWaveBulletCount = thirdEnemyWaveBulletPool.Count;
 
     }
 
@@ -147,6 +116,7 @@ public class BulletManager : MonoBehaviour
                         playerBulletPool.Enqueue(factory.CreateBullet(BulletType.PLAYER));
                     }
                     bullet = playerBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().damageValue = player.damage;
                     // stats
                     playerBulletCount = playerBulletPool.Count;
                     activePlayerBullets++;
@@ -159,6 +129,7 @@ public class BulletManager : MonoBehaviour
                         firstEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.FIRSTENEMY));
                     }
                     bullet = firstEnemyBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().damageValue = 5;
                     // stats
                     firstEnemyBulletCount = firstEnemyBulletPool.Count;
                     activeFirstEnemyBullets++;
@@ -172,6 +143,23 @@ public class BulletManager : MonoBehaviour
                         secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.SECONDENEMY));
                     }
                     bullet = secondEnemyBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().damageValue = 10;
+
+                    // stats
+                    secondEnemyBulletCount = secondEnemyBulletPool.Count;
+                    activeSecondEnemyBullets++;
+                }
+                break;
+
+            case BulletType.THIRDENEMY:
+                {
+                    if (secondEnemyBulletPool.Count < 1)
+                    {
+                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(BulletType.THIRDENEMY));
+                    }
+                    bullet = secondEnemyBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().damageValue = 15;
+
                     // stats
                     secondEnemyBulletCount = secondEnemyBulletPool.Count;
                     activeSecondEnemyBullets++;
@@ -194,13 +182,14 @@ public class BulletManager : MonoBehaviour
 
         switch (type)
         {
-            case BulletType.SECONDENEMY:
+            case BulletType.ENEMYWAVE:
                 {
                     if (secondEnemyBulletPool.Count < 1)
                     {
-                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(bulletPosition - characterPos, BulletType.SECONDENEMY));
+                        secondEnemyBulletPool.Enqueue(factory.CreateBullet(bulletPosition - characterPos, BulletType.ENEMYWAVE));
                     }
                     bullet = secondEnemyBulletPool.Dequeue();
+                    bullet.GetComponent<BulletBehaviour>().damageValue = 20;
 
                     //set direction
                     bullet.GetComponent<BulletBehaviour>().SetDirection(bulletPosition - characterPos, 6);
@@ -249,29 +238,11 @@ public class BulletManager : MonoBehaviour
                 thirdEnemyBulletCount = thirdEnemyBulletPool.Count;
                 activeThirdEnemyBullets--;
                 break;
-            case BulletType.FORTHENEMY:
-                forthEnemyBulletPool.Enqueue(bullet);
+            case BulletType.ENEMYWAVE:
+                thirdEnemyWaveBulletPool.Enqueue(bullet);
                 //stats
-                forthEnemyBulletCount = forthEnemyBulletPool.Count;
-                activeForthEnemyBullets--;
-                break;
-            case BulletType.ENEMYROCKET:
-                thirdEnemyRocketPool.Enqueue(bullet);
-                //stats
-                thirdEnemyRocketCount = thirdEnemyRocketPool.Count;
-                activeThirdEnemyRockets--;
-                break;
-            case BulletType.LONGLAYSER:
-                fifthEnemyLayserPool.Enqueue(bullet);
-                //stats
-                fifthEnemyLayserCount = fifthEnemyLayserPool.Count;
-                activeFifthEnemyLaysers--;
-                break;
-            case BulletType.ENEMYWAYVE:
-                forthEnemyWaveBulletPool.Enqueue(bullet);
-                //stats
-                forthEnemyWaveBulletCount = forthEnemyWaveBulletPool.Count;
-                activeForthEnemyWaveBullets--;
+                thirdEnemyWaveBulletCount = thirdEnemyWaveBulletPool.Count;
+                thirdForthEnemyWaveBullets--;
                 break;
         }
     }

@@ -4,10 +4,10 @@
 //Author : Wanbo. Wang
 //StudentID : 101265108
 //Created On : 10/02/2022 11:09 AM
-//Last Modified On : 10/22/2022 4:04 PM
+//Last Modified On : 10/23/2022 09:38 PM
 //Copy Rights : SkyeHouse Intelligence
 //Rivision Histrory: Create file => Moved PlayerState to PlayerPatrolBehaviour.cs
-//                   => Clean Code and Add comments => add SFX for button click
+//                   => Clean Code and Add comments => add SFX for button click => add pause button click
 //Description : Class for manage all the scenes that has menu or buttons and work with the button click.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,6 +37,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private AudioClip buttonClick;
 
+    private bool isPause = false;
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -61,6 +63,15 @@ public class MenuManager : MonoBehaviour
             {
                 SceneManager.LoadScene(sceneBuildIndex: 2);
             }
+
+        if(isPause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 
     // work with quit button
@@ -73,6 +84,21 @@ public class MenuManager : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
         Application.Quit();
+    }
+
+    public void PauseButtonClick()
+    {
+        // sfx
+        audioSource.PlayOneShot(buttonClick);
+
+        if(isPause)
+        {
+            isPause = false;
+        }
+        else
+        {
+            isPause = true;
+        }
     }
 
     // work with start button and restart button
